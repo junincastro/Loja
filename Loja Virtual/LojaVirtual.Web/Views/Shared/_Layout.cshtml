@@ -1,0 +1,44 @@
+﻿@using System.Web.Optimization
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title Loja Virtual</title>
+
+    @Styles.Render("~/Content/css")
+
+</head>
+
+<body>
+
+    <div class="navbar navbar-inverse" role="navigation">
+
+        <a class="navbar-brand" href="#">Loja Virtual</a>
+
+        @Html.Action("Resumo", "Carrinho")
+
+    </div>
+
+    <div>
+
+        <div id="categorias" class="col-xs-3">
+            @Html.Action("Menu", "Categoria")
+        </div>
+
+        <div id="categorias" class="col-xs-8">
+            @RenderBody()
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @RenderSection("scripts", required: false)
+
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+﻿
+@model IEnumerable<LojaVirtual.Dominio.Entidades.Produto>
+
+@{
+    ViewBag.Title = "Administrativo - Produtos";
+    Layout = "~/Areas/Administrativo/Views/Shared/_AdministrativoLayout.cshtml";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 style="text-align:center">Loja Virtual - Administrativo</h3>
+        <a href="~/">Voltar a página inicial</a>
+    </div>
+    <div class="panel-body">
+
+        @Html.ActionLink("Novo produto", "NovoProduto", "Produto", new { @class = "btn btn-primary", @style = "color: white" })
+        <br />
+        <br />
+        <table class="table table-striped table-condensed table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th>Nome</th>
+                    <th class="text-center">Preço</th>
+                    <th class="text-center">Excluir</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr id="row-@item.ProdutoId">
+                        <td class="text-center">
+                            @item.ProdutoId
+                        </td>
+                        <td>
+                            @Html.ActionLink(item.Nome, "Alterar", new { item.ProdutoId })
+                        </td>
+                        <td class="text-center">
+                            @item.Preco.ToString("c")
+                        </td>
+                        <td class="text-center">
+                            @*@using (Html.BeginForm("Excluir", "Produto"))
+                                {
+                                    @Html.Hidden("ProdutoId", item.ProdutoId)
+                                    <input type="submit" class="btn btn-default btn-xs" value="Excluir"/>
+                                }*@
+
+                            <input type="submit" class="btn btn-danger btn-xs" id="@item.ProdutoId" name="@item.Nome" value="Excluir" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>      
+    </div>
+</div>
+@Html.Partial("Confirmacao")
