@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using LojaVirtual.Dominio.Repositorio;
 using LojaVirtual.Web.V2.Models;
+using LojaVirtual.Web.Models;
 
 namespace LojaVirtual.Web.V2.Controllers
 {
@@ -10,6 +11,7 @@ namespace LojaVirtual.Web.V2.Controllers
         private ProdutoModeloRepositorio _repositorio;
         private ProdutosViewModel _model;
         private MenuRepositorio _menuRepositorio;
+
 
         public ActionResult Index()
         {
@@ -48,6 +50,10 @@ namespace LojaVirtual.Web.V2.Controllers
             _model = new ProdutosViewModel { Produtos = produtos, Titulo = genero };
             return View("Navegacao", _model);
         }
+
+
+
+
 
         #region [Tenis por Categoria]
 
@@ -93,5 +99,56 @@ namespace LojaVirtual.Web.V2.Controllers
 
 
         #endregion
+
+
+
+
+        #region [Casual]
+
+
+        /// <summary>
+        /// Obte modalidades de casual exibido no Menu
+        /// </summary>
+        /// <returns></returns>
+        [ChildActionOnly]
+        [OutputCache(Duration = 3600, VaryByParam = "*")]
+        public ActionResult CasualSubGrupo()
+        {
+            _menuRepositorio = new MenuRepositorio();
+            var casual = _menuRepositorio.ModalidadeCasual();
+            var subGrupo = _menuRepositorio.ObterCasualSubGrupo();
+
+            var model = new ModalidadeSubGrupoViewModel
+            {
+                Modalidade = casual,
+                SubGrupos = subGrupo
+
+            };
+
+            return PartialView("_CasualSubGrupo", model);
+        }
+
+
+
+        [Route("{modalidadeCodigo}/casual/{subGrupoCodigo}/{subGrupoDescricao}")]
+        public ActionResult ObterModalidadeSubGrupo(string modalidadeCodigo
+            , string subGrupoCodigo, string subGrupoDescricao)
+        {
+            _repositorio = new ProdutoModeloRepositorio();
+            var produtos = _repositorio.ObterProdutosVitrine(modalidade: modalidadeCodigo,
+                subgrupo: subGrupoCodigo);
+
+            _model = new ProdutosViewModel
+            {
+                Produtos = produtos,
+                Titulo = subGrupoDescricao.UpperCaseFirst()
+            };
+
+            return View("Navegacao", _model);
+        }
+
+        #endregion
+
+
     }
 }
