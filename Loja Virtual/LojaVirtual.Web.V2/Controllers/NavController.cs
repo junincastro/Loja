@@ -1,6 +1,6 @@
-﻿using LojaVirtual.Dominio.Repositorio;
+﻿using System.Web.Mvc;
+using LojaVirtual.Dominio.Repositorio;
 using LojaVirtual.Web.V2.Models;
-using System.Web.Mvc;
 
 namespace LojaVirtual.Web.V2.Controllers
 {
@@ -18,28 +18,34 @@ namespace LojaVirtual.Web.V2.Controllers
             return View(_model);
         }
 
-        public JsonResult TesteMetedoVitrine()
+        [Route("nav/{id}/{marca}")]
+        public ActionResult ObterProdutosPorMarcas(string id, string marca)
         {
-            ProdutoModeloRepositorio repositorio = new ProdutoModeloRepositorio();
-
-
-
-            var produtos = repositorio.ObterProdutosVitrine(modalidade: "0051");
-
-            return Json(produtos, JsonRequestBehavior.AllowGet);
+            _repositorio = new ProdutoModeloRepositorio();
+            var produtos = _repositorio.ObterProdutosVitrine(marca: id);
+            _model = new ProdutosViewModel { Produtos = produtos, Titulo = marca };
+            return View("Navegacao", _model);
         }
 
 
-        [Route("nav/{id}/{marca}")]
-        public ActionResult ObterProdutosPorMarcas(string id)
+        [Route("nav/times/{id}/{clube}")]
+        public ActionResult ObterProdutosPorClubes(string id, string clube)
         {
+            _repositorio = new ProdutoModeloRepositorio();
+            var produtos = _repositorio.ObterProdutosVitrine(linha: id);
+            _model = new ProdutosViewModel { Produtos = produtos, Titulo = clube };
+            return View("Navegacao", _model);
+        }
 
 
-            //repositorio.ObterProdutosVitrine(linha: id, subcategoria: id);
 
-            // var model = new ProdutosViewModel {Produtos = null};
-
-            return View();
+        [Route("nav/genero/{id}/{genero}")]
+        public ActionResult ObterProdutosPorGenero(string id, string genero)
+        {
+            _repositorio = new ProdutoModeloRepositorio();
+            var produtos = _repositorio.ObterProdutosVitrine(genero: id);
+            _model = new ProdutosViewModel { Produtos = produtos, Titulo = genero };
+            return View("Navegacao", _model);
         }
     }
 }
